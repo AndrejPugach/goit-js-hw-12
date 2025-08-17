@@ -4,10 +4,14 @@ import injectHTML from 'vite-plugin-html-inject';
 import FullReload from 'vite-plugin-full-reload';
 import SortCss from 'postcss-sort-media-queries';
 
+
 export default defineConfig(({ command }) => {
   return {
     define: {
       [command === 'serve' ? 'global' : '_global']: {},
+    },
+    optimizeDeps: {
+    include: ["izitoast"],
     },
     root: 'src',
     build: {
