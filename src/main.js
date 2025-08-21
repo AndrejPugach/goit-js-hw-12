@@ -1,63 +1,79 @@
-
+import { getImagesByQuery } from "./js/pixabay-api";
+import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, loadMoreBtnVisibleStatus, scrollNewContent, showLoader } from "./js/render-functions";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-import { getImagesByQuery } from "./js/pixabay-api.js";
-import { createGallery, clearGallery,showLoader, hideLoader} from "./js/render-functions.js";
 
-const form = document.querySelector('form');
-const submitBtn = form.querySelector('button[type="submit"]');
 
- 
-form.addEventListener('submit', (e) => {
+const formElem = document.querySelector('.form');
+const loadMoreBtnElem = document.querySelector('.btn-load');
+
+let query = '';
+let page = 1;
+const per_page = 15;
+let totalHits = 0;
+
+
+
+formElem.addEventListener('submit', async e => {
     e.preventDefault();
 
+    query = e.target.elements.searchText.value.trim();
 
-        const formData = new FormData(e.target);
-        const message = formData.get('searchText').trim();
-    
-        if (!message) {
+    if(query === '') {
+        iziToast.warning({
+            title: 'Warning',
+            message: 'Empty input field',
+        });
+        return;
+    };
+    page = 1;
+    clearGallery();
+    showLoader();
+    hideLoadMoreButton();
+
+    try {
+        const data = await getImagesByQuery(query, page, per_page);
+        totalHits = data.totalHits;
+
+        if (data.hits.length === 0) {
             iziToast.error({
-                position: 'topRight',
-                title: 'Ерор',
-                message: 'Ви нічого не ввели!'
+                message:
+                "Sorry, there are no images matching your search query. Please try again!",
             });
             return;
-    }
-        clearGallery();
-        showLoader();
-
-        submitBtn.disabled = true;
-
-        
-        getImagesByQuery(message).then(result => {
-   
-            const images = result.data.hits;
-        
-            if (!images.length) {
-                iziToast.error({
-                    position: 'topRight',
-                    title: 'Немає результатів',
-                    message: 'Нічого не знайдено'
-                });
-                submitBtn.disabled = false;
-               submitBtn.textContent = oldText;
-                return;
-            }
-
-            createGallery(images)
-                ;
-        }).catch((err) => {console.log(err);
-        
-            iziToast.error({
-                position: 'topRight',
-                title: err,
-                message: 'Помилка'
-            })
-
-        }).then(() => {
-           hideLoader();
-           submitBtn.disabled = false;
-            e.target.reset();
+        } else {
+            createGallery(data.hits);
+            loadMoreBtnVisibleStatus(totalHits, page);
+        }
+    } catch (error) {
+        iziToast.error({
+            message: "An error occurred while fetching images. Please try again.",
         });
+    } finally {
+        hideLoader();
+    }
 
+
+    e.target.reset();
+});
+
+
+
+loadMoreBtnElem.addEventListener('click', async () => {
+    page += 1;
+    showLoader();
+
+    
+    try {
+        const data = await getImagesByQuery(query, page, per_page);
+        createGallery(data.hits);     
+        loadMoreBtnVisibleStatus(totalHits, page);
+        scrollNewContent();
+    } catch (error) {
+        iziToast.error({
+            message: "An error occurred while fetching images. Please try again.",
+        });
+    } finally {
+        hideLoader();
+    }
 })
