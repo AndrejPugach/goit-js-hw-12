@@ -1,7 +1,7 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-
-
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
 const galleryElem = document.querySelector('.gallery');
 let lightbox = new SimpleLightbox(".gallery a");
@@ -28,35 +28,35 @@ export function createGallery(images) {
 }
 
 export function clearGallery() {
-    galleryElem.innerHTML = '';
+  galleryElem.innerHTML = '';
 }
 
 export function showLoader() {
-    document.querySelector('.loader').classList.remove('is-hidden');
+  document.querySelector('.loader').classList.remove('is-hidden');
 }
 
 export function hideLoader() {
-    document.querySelector('.loader').classList.add('is-hidden');
+  document.querySelector('.loader').classList.add('is-hidden');
 }
 
 export function showLoadMoreButton() {
-    document.querySelector('.btn-load').classList.remove('is-hidden');
+  document.querySelector('.btn-load').classList.remove('is-hidden');
 }
 
 export function hideLoadMoreButton() {
-    document.querySelector('.btn-load').classList.add('is-hidden');
+  document.querySelector('.btn-load').classList.add('is-hidden');
 }
 
 export function loadMoreBtnVisibleStatus(totalHits, page, per_page = 15) {
-    const maxPage = Math.ceil(totalHits / per_page);
-    if(page < maxPage) {
-            showLoadMoreButton();
-        } else {
-            hideLoadMoreButton();
-            iziToast.info({
-                message: "We're sorry, but you've reached the end of search results.",
-            });
-        };
+  const maxPage = Math.ceil(totalHits / per_page);
+  if (page < maxPage) {
+    showLoadMoreButton();
+  } else {
+    hideLoadMoreButton();
+    iziToast.info({
+      message: "We're sorry, but you've reached the end of search results.",
+    });
+  }
 }
 
 export function scrollNewContent() {
