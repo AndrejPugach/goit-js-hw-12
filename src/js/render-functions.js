@@ -14,14 +14,14 @@ export function createGallery(images) {
           class="gallery-image"
           src="${img.webformatURL}" 
           alt="${img.tags}" 
-          loading="lazy" 
+          loading="lazy"
         />
       </a>
-      <div class = "gallery-box">
-            <p class="gallery-box-text">Likes <span class="gallery-box-span">${image.likes}</span></p>
-            <p class="gallery-box-text">Views <span class="gallery-box-span">${image.views}</span></p>
-            <p class="gallery-box-text">Comments <span class="gallery-box-span">${image.comments}</span></p>
-            <p class="gallery-box-text">Downloads <span class="gallery-box-span">${image.downloads}</span></p>
+      <div class="gallery-box">
+        <p class="gallery-box-text">Likes <span class="gallery-box-span">${img.likes}</span></p>
+        <p class="gallery-box-text">Views <span class="gallery-box-span">${img.views}</span></p>
+        <p class="gallery-box-text">Comments <span class="gallery-box-span">${img.comments}</span></p>
+        <p class="gallery-box-text">Downloads <span class="gallery-box-span">${img.downloads}</span></p>
       </div>
     </li>
   ).join('');
