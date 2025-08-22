@@ -10,12 +10,7 @@ export function createGallery(images) {
   return images.map(img => 
     <li class="gallery-item">
       <a class="gallery-link" href="${img.largeImageURL}">
-        <img 
-          class="gallery-image"
-          src="${img.webformatURL}" 
-          alt="${img.tags}" 
-          loading="lazy"
-        />
+        <img class="gallery-image" src="${img.webformatURL}" alt="${img.tags}" loading="lazy"/>
       </a>
       <div class="gallery-box">
         <p class="gallery-box-text">Likes <span class="gallery-box-span">${img.likes}</span></p>
